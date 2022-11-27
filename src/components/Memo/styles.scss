@@ -1,0 +1,18 @@
+.memo{
+    &-parent{
+        text-align: center;
+        .ant-input-group-addon{
+            background-color: transparent;
+            border: none;
+        }
+        .ant-input{
+            border: none;
+        }
+    }
+    &-antd-space{
+        width: 50%;
+        .ant-space-item{
+            display: flex;
+        }
+    }
+}
