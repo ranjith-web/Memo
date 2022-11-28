@@ -24,7 +24,7 @@ const MemoApp = () => {
                 depth = depth > -1 ? depth - 1 : depth;
             }
             items.push(
-                <Memo data={item} depth={depth} index={_idx}  key={item.id} id={item.id} {...memoList} />
+                <Memo data={item} depth={depth} index={item.index}  key={item.id} id={item.id} text={item.text} {...memoList} />
             )
             if(item.children.length > 0){
                 let childItems = renderMemoItems(item.children, _idx);
