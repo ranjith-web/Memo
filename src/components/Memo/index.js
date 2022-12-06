@@ -5,13 +5,17 @@ import './styles.scss';
 
 const INDENT_SIZE = 25;
 
-const Memo = ({ index, id, makeChild, depth, text }) => {
+const Memo = ({ data, makeChild, depth, unMakeChild }) => {
+    const { index, id, text } = data;
     const marginLeft = `${depth * INDENT_SIZE}px`;
 
     const getParentIndex = (index) => {
         const _idx = index.split('-');
         const prevIndex = _idx[_idx.length - 1];
-        _idx[_idx.length - 1] = prevIndex - 1;
+        let c = prevIndex - 1;
+        if(c > 0){
+            _idx[_idx.length - 1] = c;
+        }
         return _idx.join("-");
     }
 
@@ -21,8 +25,14 @@ const Memo = ({ index, id, makeChild, depth, text }) => {
                 if (!e.shiftKey) {  // tab
                     e.preventDefault();
                     if (e.type === 'keydown') {
-                        makeChild(getParentIndex(index), id);
+                        makeChild(getParentIndex(index), id, data);
                     }
+                }else {  // shift+tab
+                    e.preventDefault();
+                    if (e.type === 'keydown') {
+                        unMakeChild(id);
+                    }
+                    break;
                 }
                 break;
             default:
