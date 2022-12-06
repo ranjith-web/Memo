@@ -139,7 +139,6 @@ export const MemoProvider = (props) => {
             index.split("-"),
             false
         );
-        console.log("parentItem---->", parentItem);
         if(parentItem !== undefined){
             addChildToParent(parentItem, currentNode);
             removeOrMoveList(memoCopy, id);
@@ -148,7 +147,7 @@ export const MemoProvider = (props) => {
             setMemo(memoCopy);
         }
     }
-
+    //Function to decide tree to move or remove
     const removeOrMoveList = (lists, id, move = {}) => {
         let found = false;
         let isMoveEnable = move && move.hasOwnProperty('enable') && move.enable;
@@ -170,7 +169,9 @@ export const MemoProvider = (props) => {
                     prevSplit.pop();
                     prevSplit.push(Number(lastIndex)+1);
                     let combinedIndex = prevSplit.join('-');
-                    move.parentNode.splice(lastPrevIndex, 0, {...sl[0], index: combinedIndex, text: `Text ${combinedIndex}`})
+                    let newObj = {...sl[0], index: combinedIndex, text: `Text ${combinedIndex}`};
+                    overrideChildrens(null, newObj);
+                    move.parentNode.splice(lastPrevIndex, 0, newObj);
                 }else {
                     lists.splice(i, 1);
                 }
@@ -190,7 +191,6 @@ export const MemoProvider = (props) => {
 
     const unMakeChild = (id) => {
         const memoCopy = [...memo];
-        
         removeOrMoveList(memoCopy, id, {enable: true});
         setMemo(memoCopy);
     }
