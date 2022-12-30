@@ -5,14 +5,14 @@ import './styles.scss';
 
 const INDENT_SIZE = 25;
 
-const Memo = ({ data, makeChild, depth, unMakeChild }) => {
+const Memo = ({ data, makeChild, depth, unMakeChild, deleteMemo }) => {
     const { index, id, text } = data;
     const marginLeft = `${depth * INDENT_SIZE}px`;
 
     const getParentIndex = (index) => {
-        const _idx = index.split('-');
-        const prevIndex = _idx[_idx.length - 1];
-        let c = prevIndex - 1;
+        let _idx = index.split('-'),
+            prevIndex = _idx[_idx.length - 1],
+            c = prevIndex - 1;
         if(c > 0){
             _idx[_idx.length - 1] = c;
         }
@@ -30,7 +30,7 @@ const Memo = ({ data, makeChild, depth, unMakeChild }) => {
                 }else {  // shift+tab
                     e.preventDefault();
                     if (e.type === 'keydown') {
-                        unMakeChild(id);
+                        unMakeChild(index, id, data);
                     }
                     break;
                 }
@@ -47,7 +47,7 @@ const Memo = ({ data, makeChild, depth, unMakeChild }) => {
             dataTestId="todo-item-cross"
             listId={"listId"}
             itemId={"itemId"}
-            removeItem={() => {}}
+            removeItem={() => deleteMemo(id, index)}
         />
     )
 

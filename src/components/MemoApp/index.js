@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Space, Button } from 'antd';
 import Memo from '../Memo';
 import { MemoContext } from '../../context';
@@ -6,6 +6,10 @@ import { MemoContext } from '../../context';
 const INDEX_SEPERATOR = "-";
 const MemoApp = () => {
     const memoList = useContext(MemoContext);
+
+    useEffect(() => {
+        memoList.addMemo();
+    }, [])
     
     const renderMemoItems = (mData, idx) => {
         let l = mData.length;
