@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 
@@ -27,7 +27,7 @@ export const MemoProvider = (props) => {
     }
 
     const overrideChildrens = (newObj) => {
-        for(let i = 0; i < newObj.children.length > 0; i++){
+        for(let i = 0; i < newObj.children.length; i++){
             let pIndex = newObj.index.split("-");
             if(pIndex.length > 1){
                 let cIndex = pIndex[pIndex.length - 1];
@@ -49,9 +49,13 @@ export const MemoProvider = (props) => {
 
     const overrideChildrensV2 = (newObj) => {
         let pIndex = newObj.index.split("-");
-        for(let i = 0; i < newObj.children.length > 0; i++){
+        for(let i = 0; i < newObj.children.length; i++){
             if(i === 0){
-                pIndex.push(1);
+                if(pIndex[0] !== "0"){
+                    pIndex.push(1);
+                } else {
+                    pIndex.splice(0, 1, 1);
+                }
             } else {
                 let cIndex = pIndex[pIndex.length - 1];
                 pIndex.pop();
@@ -67,7 +71,6 @@ export const MemoProvider = (props) => {
             }
         }
     }
-
     const overrideParentSubsequent = (parentItem, memoCopy, updateChildNodes) => {
         if(isEmpty(parentItem.parent)){
             let count = 0;
@@ -76,7 +79,7 @@ export const MemoProvider = (props) => {
                 memoCopy[count].index = `${idx}`;
                 memoCopy[count].text = `Text ${idx}`;
                 if(updateChildNodes){
-                    overrideChildrensV2(memoCopy[count]);                    
+                    overrideChildrensV2(memoCopy[count]);
                 }
                 count++;
             }
@@ -160,7 +163,7 @@ export const MemoProvider = (props) => {
             index.split("-"),
             false
         );
-        if(parentItem.id === currentNode.id){
+        if(parentItem && parentItem.id === currentNode.id){
             return console.log("Invalid move");
         }
         if(parentItem !== undefined){
@@ -220,7 +223,7 @@ export const MemoProvider = (props) => {
         let goToPath = (count) => {
             let elem = path[count];
             let i = Number(elem);
-            if(path.length === 1 && path[0] == '0'){
+            if(path.length === 1 && path[0] === '0'){
                 toPush.parent = {};
                 let pos = currentParent.index.split("-");
                 pos = Number(pos[pos.length - 1]);
@@ -306,7 +309,15 @@ export const MemoProvider = (props) => {
             index.split("-"),
             true
         );
-        overrideChildrensV2(parentItem);
+        if(parentItem){
+            overrideChildrensV2(parentItem);
+        } else {
+            let newObj = {
+                children: [..._m],
+                index: "0"
+            }
+            overrideChildrensV2(newObj);
+        }
         setMemo([..._m]);
     }
 
