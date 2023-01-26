@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input, Space } from 'antd';
+import { Radio } from 'antd';
 import Remove from "../Remove";
 import './styles.scss';
 
@@ -58,7 +59,11 @@ const Memo = ({ data, makeChild, depth, unMakeChild, deleteMemo }) => {
                     marginLeft
                 }} 
                 data-index={index} 
-                addonBefore="#" 
+                addonBefore={
+                    <Radio.Group name="radiogroup" defaultValue={1}>
+                        <Radio value={1}></Radio>
+                    </Radio.Group>
+                } 
                 onKeyDown={onHandleKeyPress} 
                 addonAfter={renderDelIcon} 
                 value={text} />
